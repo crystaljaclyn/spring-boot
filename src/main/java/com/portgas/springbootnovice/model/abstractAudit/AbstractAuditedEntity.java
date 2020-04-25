@@ -1,4 +1,4 @@
-package com.portgas.springbootnovice.model;
+package com.portgas.springbootnovice.model.abstractAudit;
 
 
 import io.ebean.Model;

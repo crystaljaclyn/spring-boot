@@ -18,12 +18,12 @@ public class DatasourceConfiguration {
 
     private final CurrentUser currentUser;
 
-    private final DataSourceProperties dataSourceProperties;
+    private final Map<String,DataSourceProperties> dataSourcePropertyMap;
 
     @Autowired
-    public DatasourceConfiguration(CurrentUser currentUser,DataSourceProperties dataSourceProperties) {
+    public DatasourceConfiguration(CurrentUser currentUser,Map<String,DataSourceProperties> dataSourcePropertyMap) {
         this.currentUser = currentUser;
-        this.dataSourceProperties = dataSourceProperties;
+        this.dataSourcePropertyMap = dataSourcePropertyMap;
     }
 
     /**
@@ -81,44 +81,22 @@ public class DatasourceConfiguration {
        return resultMap;
     }
 
-    private DataSource generateDataSource(DBType dbType){
-
-        DataSource result = null;
-        switch (dbType){
-            case REPLICATE:
-                result = this.generateDataSource(
-                        dataSourceProperties.getDriverClassName()
-                        ,dataSourceProperties.getUrl()
-                        ,dataSourceProperties.getUsername()
-                        ,dataSourceProperties.getPassword()
-                );
-
-                break;
-            case MASTER:
-                result = this.generateDataSource(
-                        dataSourceProperties.getDriverClassName()
-                        ,dataSourceProperties.getUrl()
-                        ,dataSourceProperties.getUsername()
-                        ,dataSourceProperties.getPassword()
-                );
-            default:
-                break;
-        }
-
-        return result;
-    }
-
     /**
      *
-     * @param dataSourceProperties
+     * @param dbType
      * @return
      */
-    private DataSource generateDataSource(String... dataSourceProperties){
+    private DataSource generateDataSource(DBType dbType){
+        //Data source
+        DataSourceProperties dataSourceProperties = dataSourcePropertyMap.get(dbType.name().toLowerCase());
+
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-        dataSourceBuilder.driverClassName(dataSourceProperties[0]);
-        dataSourceBuilder.url(dataSourceProperties[1]);
-        dataSourceBuilder.username(dataSourceProperties[2]);
-        dataSourceBuilder.password(dataSourceProperties[3]);
+        if( dataSourceProperties != null ){
+            dataSourceBuilder.driverClassName(dataSourceProperties.getDriverClassName());
+            dataSourceBuilder.url(dataSourceProperties.getUrl());
+            dataSourceBuilder.username(dataSourceProperties.getUsername());
+            dataSourceBuilder.password(dataSourceProperties.getPassword());
+        }
         return dataSourceBuilder.build();
     }
 }

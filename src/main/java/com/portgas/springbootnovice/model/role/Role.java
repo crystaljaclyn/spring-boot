@@ -1,4 +1,6 @@
-package com.portgas.springbootnovice.model;
+package com.portgas.springbootnovice.model.role;
+
+import com.portgas.springbootnovice.model.abstractAudit.AbstractAuditedEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
