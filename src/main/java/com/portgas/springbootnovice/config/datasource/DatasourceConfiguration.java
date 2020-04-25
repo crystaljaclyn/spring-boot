@@ -1,5 +1,6 @@
 package com.portgas.springbootnovice.config.datasource;
 
+import com.zaxxer.hikari.HikariDataSource;
 import io.ebean.EbeanServer;
 import io.ebean.EbeanServerFactory;
 import io.ebean.config.ServerConfig;
@@ -32,9 +33,15 @@ public class DatasourceConfiguration {
      */
     @Bean(name ="datasource")
     public DataSource dataSource(){
+
+        HikariDataSource defaultDataSource = (HikariDataSource) this.generateDataSource( dataSourcePropertyMap.get(DBType.MASTER.name().toLowerCase()));
+        defaultDataSource.setMaximumPoolSize( 2 );
+        //Generate Multi datasource
         Map<Object,Object> targetDataSource = this.generateDataSource();
+
+        //Routing datasource config
         RoutingDatasource routingDatasource = new RoutingDatasource();
-        routingDatasource.setDefaultTargetDataSource( this.generateDataSource( DBType.MASTER ) );
+        routingDatasource.setDefaultTargetDataSource( defaultDataSource );
         routingDatasource.setTargetDataSources(targetDataSource);
 
         return routingDatasource;
@@ -54,7 +61,6 @@ public class DatasourceConfiguration {
         config.setDefaultServer(true);
         config.setDataSource(dataSource);
         config.setCurrentUserProvider(currentUser);
-
         return config;
     }
 
@@ -74,29 +80,36 @@ public class DatasourceConfiguration {
      */
     private Map<Object,Object> generateDataSource(){
        Map<Object,Object> resultMap = new HashMap<>();
-
-       resultMap.put(DBType.MASTER,this.generateDataSource(DBType.MASTER));
-       resultMap.put(DBType.REPLICATE,this.generateDataSource(DBType.REPLICATE));
+       for(DBType dbType : DBType.values()){
+           DataSourceProperties dataSourceProperties = dataSourcePropertyMap.get(dbType.name().toLowerCase());
+           HikariDataSource dataSource = (HikariDataSource) this.generateDataSource(dataSourceProperties);
+           this.configDataSource( dataSource , dataSourceProperties);
+           resultMap.put(dbType,dataSource);
+       }
 
        return resultMap;
     }
 
     /**
      *
-     * @param dbType
+     * @param dataSourceProperties
      * @return
      */
-    private DataSource generateDataSource(DBType dbType){
-        //Data source
-        DataSourceProperties dataSourceProperties = dataSourcePropertyMap.get(dbType.name().toLowerCase());
-
+    private DataSource generateDataSource(DataSourceProperties dataSourceProperties){
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-        if( dataSourceProperties != null ){
-            dataSourceBuilder.driverClassName(dataSourceProperties.getDriverClassName());
-            dataSourceBuilder.url(dataSourceProperties.getUrl());
-            dataSourceBuilder.username(dataSourceProperties.getUsername());
-            dataSourceBuilder.password(dataSourceProperties.getPassword());
-        }
-        return dataSourceBuilder.build();
+        dataSourceBuilder.driverClassName(dataSourceProperties.getDriverClassName());
+        dataSourceBuilder.url(dataSourceProperties.getUrl());
+        dataSourceBuilder.username(dataSourceProperties.getUsername());
+        dataSourceBuilder.password(dataSourceProperties.getPassword());
+        return  dataSourceBuilder.build();
+    }
+
+    /**
+     *
+     * @param dataSource
+     * @param dataSourceProperties
+     */
+    private void configDataSource(HikariDataSource dataSource , DataSourceProperties dataSourceProperties){
+        dataSource.setMaximumPoolSize( dataSourceProperties.getMaxConnectionPool() );
     }
 }

@@ -2,7 +2,6 @@ package com.portgas.springbootnovice.controller;
 
 import com.portgas.springbootnovice.config.datasource.DBType;
 import com.portgas.springbootnovice.service.core.RoleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,12 +12,16 @@ import java.io.IOException;
 @RequestMapping(value = "/download")
 public class DownloadController
 {
-    @Autowired
-    private RoleService roleService;
+    private final RoleService roleService;
 
-    @GetMapping(value = "/test")
+    public DownloadController(RoleService roleService) {
+        this.roleService = roleService;
+    }
+
+    @GetMapping(value = "/test-master-replicate-database")
     public void getUserFile() throws IOException
     {
+
         roleService.getListRole(DBType.REPLICATE);
         roleService.getListRole(DBType.MASTER);
     }

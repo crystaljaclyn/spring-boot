@@ -21,9 +21,9 @@ public class RoleServiceImpl implements RoleService {
 
         List<Role> roleList = new QRole()
                 .findList();
-
+        System.out.println("---------------- "+ dbType.name() +" -------------");
         for (Role r:roleList){
-            System.out.println("Id : " + r.getId());
+            System.out.println("Name : " + r.getName());
         }
 
         DBContextHolder.clearDbType();
