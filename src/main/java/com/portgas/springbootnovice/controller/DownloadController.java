@@ -1,6 +1,5 @@
 package com.portgas.springbootnovice.controller;
 
-import com.portgas.springbootnovice.config.database.DBType;
 import com.portgas.springbootnovice.service.core.RoleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +21,7 @@ public class DownloadController
     public void getUserFile() throws IOException
     {
 
-        roleService.getListRole(DBType.REPLICATE);
-        roleService.getListRole(DBType.MASTER);
+        roleService.getListRole();
+        roleService.getListRoleMaster();
     }
 }
