@@ -1,6 +1,6 @@
 package com.portgas.springbootnovice.controller;
 
-import com.portgas.springbootnovice.config.datasource.DBType;
+import com.portgas.springbootnovice.config.database.DBType;
 import com.portgas.springbootnovice.service.core.RoleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

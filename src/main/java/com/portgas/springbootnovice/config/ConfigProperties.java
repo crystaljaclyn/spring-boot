@@ -1,7 +1,7 @@
 package com.portgas.springbootnovice.config;
 
 
-import com.portgas.springbootnovice.config.datasource.DataSourceProperties;
+import com.portgas.springbootnovice.config.database.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

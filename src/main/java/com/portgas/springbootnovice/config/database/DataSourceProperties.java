@@ -1,4 +1,4 @@
-package com.portgas.springbootnovice.config.datasource;
+package com.portgas.springbootnovice.config.database;
 
 import lombok.Getter;
 import lombok.Setter;

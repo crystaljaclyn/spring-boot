@@ -1,4 +1,4 @@
-package com.portgas.springbootnovice.config.datasource;
+package com.portgas.springbootnovice.config.database;
 
 public class DBContextHolder {
     private static final ThreadLocal<DBType> contextHolder = new ThreadLocal<>();

@@ -1,4 +1,4 @@
-package com.portgas.springbootnovice.config.datasource;
+package com.portgas.springbootnovice.config.database;
 
 import com.zaxxer.hikari.HikariDataSource;
 import io.ebean.EbeanServer;

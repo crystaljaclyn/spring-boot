@@ -1,4 +1,4 @@
-package com.portgas.springbootnovice.config.datasource;
+package com.portgas.springbootnovice.config.database;
 
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
