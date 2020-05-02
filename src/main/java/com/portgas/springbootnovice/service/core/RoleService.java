@@ -9,4 +9,8 @@ public interface RoleService {
     List<Role> getListRole();
 
     List<Role> getListRoleMaster();
+
+    Role createEntity(Role paramInput);
+
+    Role deleteEntity(Role paramInput);
 }

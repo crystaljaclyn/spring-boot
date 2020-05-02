@@ -39,4 +39,32 @@ public class RoleServiceImpl implements RoleService {
         }
         return null;
     }
+
+    /**
+     *
+     * @param paramInput
+     * @return
+     */
+    @Override
+    public Role createEntity(Role paramInput) {
+        paramInput.save();
+
+        Role role = new Role();
+        role.setName("TESt Role                                                                                                                                                                         sdfsdfdsf         sdfdsfsdfsdfsdfdsf");
+        role.save();
+
+        role.delete();
+        return paramInput;
+    }
+
+    /**
+     *
+     * @param paramInput
+     * @return
+     */
+    @Override
+    public Role deleteEntity(Role paramInput) {
+        paramInput.deletePermanent();
+        return paramInput;
+    }
 }
