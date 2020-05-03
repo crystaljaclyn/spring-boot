@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
 @SpringBootConfiguration
+@EnableTransactionManagement
 public class DatasourceConfiguration {
 
     private final CurrentUser currentUser;
@@ -36,6 +38,7 @@ public class DatasourceConfiguration {
 
         HikariDataSource defaultDataSource = (HikariDataSource) this.generateDataSource( dataSourcePropertyMap.get(DBType.MASTER.name().toLowerCase()));
         defaultDataSource.setMaximumPoolSize( 2 );
+        defaultDataSource.setAutoCommit(false);
         //Generate Multi datasource
         Map<Object,Object> targetDataSource = this.generateDataSource();
 
@@ -111,5 +114,6 @@ public class DatasourceConfiguration {
      */
     private void configDataSource(HikariDataSource dataSource , DataSourceProperties dataSourceProperties){
         dataSource.setMaximumPoolSize( dataSourceProperties.getMaxConnectionPool() );
+        dataSource.setAutoCommit(false);
     }
 }

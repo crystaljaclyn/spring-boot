@@ -23,16 +23,17 @@ public class TransactionInterceptorCustom implements Ordered {
         return this.order;
     }
 
-    @Around(value="@annotation(transactionalCustom)")
-    public Object proceed(ProceedingJoinPoint pjp, TransactionalCustom transactionalCustom) throws Throwable {
+    @Around(value="@annotation(datasourceType)")
+    public Object proceed(ProceedingJoinPoint pjp, DatasourceType datasourceType) throws Throwable {
         try {
-            if( DBType.REPLICATE.equals(transactionalCustom.dbType())){
+            DBType oldDBType = DBContextHolder.getDbType();
+            if( DBType.REPLICATE.equals(datasourceType.dbType())){
                 DBContextHolder.setDbType(DBType.REPLICATE);
             }else{
                 DBContextHolder.setDbType(DBType.MASTER);
             }
             Object result = pjp.proceed();
-            DBContextHolder.clearDbType();
+            DBContextHolder.setDbType(oldDBType);
             return result;
         } finally {
             // restore state
