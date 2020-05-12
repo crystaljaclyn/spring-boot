@@ -45,12 +45,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
+
         <!-- Data : Ebean -->
 
         <dependency>
             <groupId>io.ebean</groupId>
             <artifactId>ebean</artifactId>
             <version>${ebean.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.ebean</groupId>
+            <artifactId>ebean-spring-txn</artifactId>
         </dependency>
         <!-- Query bean support -->
         <dependency>

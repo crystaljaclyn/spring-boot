@@ -4,10 +4,10 @@ import com.portgas.springbootnovice.config.database.DBType;
 import com.portgas.springbootnovice.config.database.DatasourceType;
 import com.portgas.springbootnovice.model.role.Role;
 import com.portgas.springbootnovice.model.role.query.QRole;
-import io.ebean.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,8 +17,8 @@ public class RoleServiceImpl implements RoleService {
     private static final Logger LOGGER= LoggerFactory.getLogger(RoleServiceImpl.class);
 
     @Override
-    @DatasourceType(dbType = DBType.REPLICATE)
     @Transactional(readOnly = true)
+    @DatasourceType(dbType = DBType.REPLICATE)
     public List<Role> getListRole() {
 
         List<Role> roleList = new QRole()

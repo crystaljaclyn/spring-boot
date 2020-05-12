@@ -3,8 +3,10 @@ package com.portgas.springbootnovice.config.database;
 import com.zaxxer.hikari.HikariDataSource;
 import io.ebean.EbeanServer;
 import io.ebean.EbeanServerFactory;
+import io.ebean.config.ExternalTransactionManager;
 import io.ebean.config.ServerConfig;
 import io.ebean.config.dbplatform.mysql.MySqlPlatform;
+import io.ebean.spring.txn.SpringJdbcTransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -51,18 +53,28 @@ public class DatasourceConfiguration {
     }
 
     /**
+     * Multi routing data source
+     * @return
+     */
+    @Bean(name ="springTransactionManager")
+    public ExternalTransactionManager externalTransactionManager(){
+        return new SpringJdbcTransactionManager();
+    }
+    /**
      * Ebean Config datasource
      * @param dataSource
      * @return
      */
     @Bean(name = "ebeanConfig")
-    public ServerConfig ebeanServerConfig(DataSource dataSource) {
+    public ServerConfig ebeanServerConfig(DataSource dataSource,ExternalTransactionManager springTransactionManager) {
 
+        //Set Ebean config
         ServerConfig config = new ServerConfig();
         config.setName("db");
         config.setDatabasePlatform(new MySqlPlatform());
         config.setDefaultServer(true);
         config.setDataSource(dataSource);
+        config.setExternalTransactionManager( springTransactionManager );
         config.setCurrentUserProvider(currentUser);
         return config;
     }
